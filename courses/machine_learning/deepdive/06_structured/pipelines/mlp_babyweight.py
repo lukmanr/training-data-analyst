@@ -16,6 +16,10 @@
 
 import kfp.dsl as dsl
 
+
+BUCKET='accelerate-2019-demo'
+PROJECT='lramsey-goog-com-csa-ml'
+
 class ObjectDict(dict):
   def __getattr__(self, name):
     if name in self:
@@ -29,8 +33,8 @@ class ObjectDict(dict):
   description='Train Babyweight model'
 )
 def train_and_deploy(
-    project='cloud-training-demos',
-    bucket='cloud-training-demos-ml',
+    project=PROJECT,
+    bucket=BUCKET,
     startYear='2000'
 ):
   """Pipeline to train babyweight model"""
@@ -139,7 +143,7 @@ def train_and_deploy(
   else:
     deploy_cmle = ObjectDict({
       'outputs': {
-        'appurl': 'https://cloud-training-demos.appspot.com/'
+        'appurl': 'https://{}.appspot.com/'.format(PROJECT)
       }
     })
 
@@ -150,6 +154,6 @@ if __name__ == '__main__':
   if len(sys.argv) != 2:
     print("Usage: mlp_babyweight  pipeline-output-name")
     sys.exit(-1)
-  
+
   filename = sys.argv[1]
   compiler.Compiler().compile(train_and_deploy, filename)
